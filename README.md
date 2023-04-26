@@ -1,27 +1,40 @@
-# Project Title
+# Developing RailNET, a deep learning model for detecting Virginia rail vocalizations
 
-A brief description of your project.
+With biodiversity in rapid decline worldwide, efficient wildlife monitoring solutions are increasingly important. Deep learning models offer new opportunities in acoustic monitoring, a field where fully manual annotation of audio recordings in prohibitively labor-intensive. State-of-the-art models for bird monitoring perform well in general, but performance varies with rare, elusive species and generalization from the focal recordings in training data to soundscape data collected in monitoring programs has proved to be a major challenge. This project focuses on the Virginia rail--a cryptic marsh bird that can serve as a stand-in for other elusive monitoring targets for whom species-specific classifiers might be of interest.
 
+So, while I hope RailNET provides some value as a classifier for Virginia rail vocalizations, my larger hope is that the methodology I used to develop RailNET can provide guidance to any project seeking to use deep learning audio classification models to monitor rare, elusive targets. I developed RailNET because I happened to be studying cryptic marsh birds, but I am also interested in using similary methodology to support monitoring of various elsuive species, avian and otherwise.
 ## Getting Started
 
-Instructions for setting up and running your project.
+A bulk of this repo is made up of code that was used during experimentation and model training. If you are interested in these details, exploring the src folder in conjunction with the technical report would be a good place to start.
 
-### Prerequisites
-
-List the software and libraries required to run your project.
+If you're primarily interested in using RailNET, then the inference_example.py will load in the model and run sample inferences on two sample audio files in the data folder. 
 
 ### Installation
 
-Step-by-step instructions for installing the necessary dependencies.
+Necessary dependencies are located in the requirements.txt file, and can be installed with the following terminal command, keeping in mind that the .txt file needs to be in your current working directory:
 
+```
+pip install -r requirements.txt
+```
 ## Usage
 
-Examples and instructions for using your project.
+To run an inference demo on two sample files in the 'data//sample_audio' folder, run:
 
-## Contributing
+```
+py inference_example.py
+```
+After a bit of runtime, this will produce a .csv file in your sample_audio folder showing showing prediction for each three-second segment of the orginal audio files, with confidence scores for each constituent model (RailNET is an ensemble), as 
+well as the final ensemble prediction. For reference, the audio file called "many_calls" has 300+ rail vocalizations and the "couple_grunts" file has two.
 
-Guidelines for contributing to the project.
+To use RailNET on your own recordings, simply modify the code in this file to point to your chosen input folder and output folder.
+
+I will be using RailNET in monitoring projects for the next few months, hoping to further test its ability to generalize. In addition to further testing, I intend to expand its capacity to include more cryptic marsh birds, including black rails, yellow rails, king rails, American bittern, and least bittern.
+
+## Collaborating
+
+If you have an acoustic monitoring project and want to develop deep learning models to support your efforts, don't hesitate to reach out!
 
 ## License
 
-Information about the project's license.
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) license. You are free to use, share, and adapt this work for non-commercial purposes only, as long as you give appropriate credit, provide a link to the license, and indicate if changes were made. For more information, please visit [creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/).
+
