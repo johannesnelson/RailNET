@@ -1,4 +1,4 @@
-# Developing RailNET, a deep learning model for detecting Virginia rail vocalizations
+# RailNET, a deep learning model for detecting Virginia rail vocalizations
 
 With biodiversity in rapid decline worldwide, efficient wildlife monitoring solutions are increasingly important. Deep learning models offer new opportunities in acoustic monitoring, a field where fully manual annotation of audio recordings in prohibitively labor-intensive. State-of-the-art models for bird monitoring perform well in general, but performance varies with rare, elusive species and generalization from the focal recordings in training data to soundscape data collected in monitoring programs has proved to be a major challenge. This project focuses on the Virginia rail--a cryptic marsh bird that can serve as a stand-in for other elusive monitoring targets for whom species-specific classifiers might be of interest.
 
