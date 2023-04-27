@@ -9,7 +9,7 @@ import os
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from sklearn.metrics import confusion_matrix, f1_score, fbeta_score, recall_score
-from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau
 import torch.nn.functional as F
 
 
@@ -144,8 +144,12 @@ def train(
         print(test_cm)
         # This will need to be altered depending on scheduler being used. This is set up to use ReduceLRonPlateau()
         # and to reduce learning rate when test_loss plateaus
+
         if scheduler is not None:
-            scheduler.step(test_loss)
+            if isinstance(scheduler, ReduceLROnPlateau):
+                scheduler.step(test_loss)
+            elif isinstance(scheduler, StepLR):
+                scheduler.step()
 
         # This updates a checkpoint after every epoch, so there is always the latest checkpoint
         if checkpoint_path is not None:

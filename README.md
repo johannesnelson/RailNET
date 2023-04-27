@@ -32,6 +32,9 @@ To use RailNET on your own recordings, simply modify the code in this file to po
 
 We will be using RailNET in monitoring projects for the next few months, hoping to further test its ability to generalize. In addition to further testing, we intend to expand its capacity to include more cryptic marsh birds, including black rails, yellow rails, king rails, American bittern, and least bittern, though whether these tests are conclusive or not will depend on the pretty-unlikely event that many of these birds are even around in the first place!
 
+
+Running the main.py script will execute the main k-fold cross validation loop that we used. In this file you can  alter the data augmentation regimes (heavy or moderate), the number of folds, epochs, etc. This would only all be useful if you were looking to experiment on your own. 
+
 ## Collaborating
 
 If you have an acoustic monitoring project and want to develop deep learning models to support your efforts, don't hesitate to reach out!
