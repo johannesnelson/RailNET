@@ -31,25 +31,30 @@ class Virginia_Rail_Dataset(Dataset):
         self.preprocessing_transforms = preprocessing_transforms
         self.augmentation_transforms = augmentation_transforms
         self.augmentation_noise_transforms = augmentation_noise_transforms
-        self.device = "cpu"
+        self.device = "cpu" # This is intentional, because some transforms weren't working on the GPU
         
     def __len__(self):
         return len(self.positive_files) + len(self.negative_files)
 
 
     def __getitem__(self, index, augment = True):
+        # If it is in the postive files folder, it gets a postive label, and if it is in the negative folder, it gets a negative one
         if index < len(self.positive_files):
             path = os.path.join(self.root_dir, self.positive_folder, self.positive_files[index])
             label = 1            
         else:
             path = os.path.join(self.root_dir, self.negative_folder, self.negative_files[index - len(self.positive_files)])
             label = 0
-
+        # Load audio
         audio, _ = torchaudio.load(path)
+        # Move it to device (CPU in this case)
         audio = audio.to(self.device)
+        # If True, apply the transforms that are applied on raw waveform
         if self.augmentation_noise_transforms is not None:
             audio = self.augmentation_noise_transforms(audio)
+        # Apply preprocessing, which converts to spectrogram    
         audio = self.preprocessing_transforms(audio)
+        # If True, apply additional transforms that need to be applied to the spectrogram
         if self.augmentation_transforms is not None:
             audio = self.augmentation_transforms(audio)
 

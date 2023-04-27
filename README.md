@@ -26,7 +26,7 @@ py inference_example.py
 After a bit of runtime, this will produce a .csv file in your sample_audio folder showing showing prediction for each three-second segment of the orginal audio files, with confidence scores for each constituent model (RailNET is an ensemble), as 
 well as the final ensemble prediction. For reference, the audio file called "many_calls" has 300+ rail vocalizations and the "couple_grunts" file has two.
 
-To use RailNET on your own recordings, simply modify the code in this file to point to your chosen input folder and output folder.
+To use RailNET on your own recordings, simply modify the code in this file to point to your chosen input folder and output folder. Keep in mind that the negative class that this model was trained on reflects the specific needs of my study area--meaning that precision is likely to suffer if your background soundscapes differ from the ones that informed my decision of what species to include. Recomposing the negative class and retraining could help here, and I hope to develop some processes to streamline this type of recomposition in the near future, which I will share here.
 
 I will be using RailNET in monitoring projects for the next few months, hoping to further test its ability to generalize. In addition to further testing, I intend to expand its capacity to include more cryptic marsh birds, including black rails, yellow rails, king rails, American bittern, and least bittern.
 

@@ -22,8 +22,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # In[3]:
 
 
-# Define training loop
 
+# Define a save_checkpoint function that saves state_dicts as well as important metrics
 def save_checkpoint(epoch, model, optimizer, metrics, checkpoint_path):
     torch.save({
         'epoch': epoch,
@@ -32,6 +32,7 @@ def save_checkpoint(epoch, model, optimizer, metrics, checkpoint_path):
         'metrics': metrics
     }, checkpoint_path)
 
+# Define a loade_checkpoint function that loads state_dicts as well as important metrics
 def load_checkpoint(model, optimizer, checkpoint_path):
     checkpoint = torch.load(checkpoint_path)
     model.load_state_dict(checkpoint['model_state_dict'])
@@ -40,6 +41,7 @@ def load_checkpoint(model, optimizer, checkpoint_path):
     metrics = checkpoint['metrics']
     return epoch, metrics
 
+# Define training loop
 def train(
     model: torch.nn.Module,
     train_loader: DataLoader,
@@ -54,7 +56,8 @@ def train(
     manual_lr: float = None  
 
 ) -> None:
-
+    
+    # If resuming, grab checkpoint and metatdata from saved checkpoint, else create empty lists to house new data
     if resume and checkpoint_path is not None and os.path.exists(checkpoint_path):
         last_epoch, metrics = load_checkpoint(model, optimizer, checkpoint_path)
         train_losses, test_losses, train_accs, test_accs, train_f1s, test_f1s, train_fbetas, test_fbetas, train_recalls, test_recalls = metrics
@@ -90,7 +93,6 @@ def train(
         for x, y in tqdm(train_loader):
             # Move the data to the device:
             x, y = x.to(device), y.to(device)
-#             x = x.unsqueeze(1)  # Add time dimension
             # Zero the gradients:
             optimizer.zero_grad()
             # Forward pass:
@@ -140,22 +142,28 @@ def train(
         print(train_cm)
         print("Test confusion matrix:")
         print(test_cm)
+        # This will need to be altered depending on scheduler being used. This is set up to use ReduceLRonPlateau()
+        # and to reduce learning rate when test_loss plateaus
         if scheduler is not None:
             scheduler.step(test_loss)
-        
+
+        # This updates a checkpoint after every epoch, so there is always the latest checkpoint
         if checkpoint_path is not None:
             metrics = (train_losses, test_losses, train_accs, test_accs, train_f1s, test_f1s, train_fbetas, test_fbetas, train_recalls, test_recalls)
             save_checkpoint(epoch + 1, model, optimizer, metrics, checkpoint_path)
             
+            # This creates separate checkpoints every 10 epochs
             if (epoch + 1) % 10 == 0:
                 checkpoint_path_10_epochs = checkpoint_path.replace('.pth', f'_epoch_{epoch + 1}.pth')
                 save_checkpoint(epoch + 1, model, optimizer, metrics, checkpoint_path_10_epochs)
-                
+            
+            # This saves the checkpoint when best_recall is surpassed    
             if test_recall > best_recall:
                 best_recall = test_recall
                 best_recall_path = checkpoint_path.replace('.pth', '_best_recall.pth')
                 save_checkpoint(epoch + 1, model, optimizer, metrics, best_recall_path)
-                
+            
+            # This saves a checkpoint when best_f1 is surpassed    
             if test_f1 > best_f1:
                 best_f1 = test_f1
                 best_f1_path = checkpoint_path.replace('.pth', '_best_f1.pth')
@@ -173,14 +181,18 @@ def compute_metrics(model, data_loader, criterion, device=device, show_FNs = Fal
     false_negatives = []
 
     for x, y in data_loader:
+        # Move data to device
         x, y = x.to(device), y.to(device)
-#         x = x.unsqueeze(1)  # Add time dimension
+        # Forward pass
         y_hat = model(x)
+        # Save predictions
         predictions = torch.argmax(y_hat, dim=1)
+        # Count correct predictions
         num_correct += torch.sum(predictions == y).item()
+        # Save loss
         loss = criterion(y_hat, y)
         total_loss += loss.item() * x.size(0)
-        
+        # If optional flag is set to True, this will save false negative results for later visualization
         if show_FNs:
             fn_indices = (predictions == 0) & (y == 1)
             
@@ -189,10 +201,10 @@ def compute_metrics(model, data_loader, criterion, device=device, show_FNs = Fal
                     softmax_scores = F.softmax(y_hat, dim=1)
                     false_negatives.append((x[i].cpu().numpy(), softmax_scores[i, 1].item()))
 
-        
+        # Save targets and predictions for metrics calculations
         all_targets.extend(y.cpu().numpy())
         all_predictions.extend(predictions.cpu().numpy())
-
+    # Compute metrics and return them
     accuracy = num_correct / len(data_loader.dataset)
     avg_loss = total_loss / len(data_loader.dataset)
     cm = confusion_matrix(all_targets, all_predictions)
