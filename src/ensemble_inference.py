@@ -9,6 +9,7 @@ import torch
 import torchaudio
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
 
 class EnsembleInference:
@@ -75,22 +76,30 @@ class EnsembleInference:
 
         return df
 
+
     def process_folder(self, input_folder, output_folder):
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
-        num_files = len(os.listdir(input_folder))
+        files = [f for f in os.listdir(input_folder) if f.endswith(".wav") or f.endswith(".WAV")]
+        num_files = len(files)
         print(f"Found {num_files} files in input folder...")
 
+        dfs = []  # Collect all DataFrames
 
-        for filename in os.listdir(input_folder):
-            if filename.endswith(".wav") or filename.endswith(".WAV"):
-                input_filepath = os.path.join(input_folder, filename)
-                output_filename_no_ext, ext = os.path.splitext(filename)
-                output_filename = output_filename_no_ext + '_results' + '.csv'
-                output_filepath = os.path.join(output_folder, output_filename)
+        for filename in tqdm(files, desc="Processing files"):
+            input_filepath = os.path.join(input_folder, filename)
+            output_filename_no_ext, ext = os.path.splitext(filename)
+            output_filename = output_filename_no_ext + '_results' + '.csv'
+            output_filepath = os.path.join(output_folder, output_filename)
 
-                print(f"Processing {input_filepath}...")
-                df = self.predict(input_filepath)
-                df.to_csv(output_filepath, index=False)
-                print(f"Processed {input_filepath} and saved results to {output_filepath}")
+            df = self.predict(input_filepath)
+            dfs.append(df)  # Add the DataFrame to the list
+            df.to_csv(output_filepath, index=False)
+
+        # Combine all DataFrames and save to a single CSV file
+        full_df = pd.concat(dfs, ignore_index=True)
+        full_output_filepath = os.path.join(output_folder, "results_full.csv")
+        full_df.to_csv(full_output_filepath, index=False)
+        print(f"Saved combined results to {full_output_filepath}")
+
 
