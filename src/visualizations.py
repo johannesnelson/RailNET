@@ -78,4 +78,40 @@ def plot_roc_curve(fpr, tpr, roc_auc, all_targets, all_probabilities, title, des
     plt.show()
 
     
+# %%
 
+import matplotlib.pyplot as plt
+
+def plot_performance_metrics(train_losses, test_losses, train_accs, test_accs, train_f1s, test_f1s, train_recalls, test_recalls):
+    plt.figure(figsize=(16, 4))
+
+    plt.subplot(1, 4, 1)
+    plt.plot(train_losses, label="Train Loss")
+    plt.plot(test_losses, label="Test Loss")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.legend()
+
+    plt.subplot(1, 4, 2)
+    plt.plot(train_accs, label="Train Accuracy")
+    plt.plot(test_accs, label="Test Accuracy")
+    plt.xlabel("Epoch")
+    plt.ylabel("Accuracy")
+    plt.legend()
+
+    plt.subplot(1, 4, 3)
+    plt.plot(train_f1s, label="Train F1 Score")
+    plt.plot(test_f1s, label="Test F1 Score")
+    plt.xlabel("Epoch")
+    plt.ylabel("F-beta Score")
+    plt.legend()
+
+    plt.subplot(1, 4, 4)
+    plt.plot(train_recalls, label="Train Recall Score")
+    plt.plot(test_recalls, label="Test Recall Score")
+    plt.xlabel("Epoch")
+    plt.ylabel("Recall Score")
+    plt.legend()
+
+    plt.suptitle("Performance Metrics")
+    plt.show()

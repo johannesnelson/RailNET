@@ -45,5 +45,5 @@ inference_call = EnsembleInference(RailNET, preprocessing_transforms, threshold=
 # In[8]:
 
 
-inference_call.process_folder('..//data//sample_audio', '..//data//dample_audio//output')
+inference_call.process_folder('..//data//sample_audio', '..//data//sample_audio//output')
 
