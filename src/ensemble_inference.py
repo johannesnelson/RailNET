@@ -13,11 +13,12 @@ from tqdm import tqdm
 
 
 class EnsembleInference:
-    def __init__(self, models, preprocessing_transforms, device=None, threshold=0.5):
+    def __init__(self, models, preprocessing_transforms, device=None, threshold=0.5, clean_output = True):
         self.models = models
         self.transforms = preprocessing_transforms
         self.device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
         self.threshold = threshold
+        self.clean_output = clean_output
         for model in self.models:
             model.to(self.device)
 
@@ -73,6 +74,8 @@ class EnsembleInference:
             predictions.append(model_predictions)
 
         df = pd.DataFrame(predictions)
+        if self.clean_output:
+            df = df[df['ensemble_prediction'] == 1]
 
         return df
 
