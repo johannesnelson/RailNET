@@ -7,7 +7,7 @@
 from ensemble_inference import EnsembleInference
 import model_maker as mm
 from train import load_checkpoint
-from load_RailNET import RailNET
+from load_RailNET import RailNET, RailNET_2
 import torch
 from prep_transforms import get_preprocessing_transforms
 
@@ -27,7 +27,7 @@ preprocessing_transforms = get_preprocessing_transforms()
 # In[2]:
 
 
-RailNET = RailNET()
+RailNET = RailNET_2()
 
 
 # In[5]:
