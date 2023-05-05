@@ -43,10 +43,10 @@ def RailNET_2():
     med_34 = mm.create_modified_resnet34(output_classes = 2, input_channels = 1)
     heav_34 = mm.create_modified_resnet34(output_classes = 2, input_channels = 1)
     
-    _, _ =load_checkpoint(heav_18, torch.optim.Adam(heav_18.parameters()),"..//..//RailNET_2.0//ResNet18_heavy_nnc_best_f1.pth")
-    _, _ =load_checkpoint(med_18, torch.optim.Adam(med_18.parameters()),"..//..//RailNET_2.0//ResNet18_nnc_best_f1.pth")
-    _, _ =load_checkpoint(med_34, torch.optim.Adam(med_34.parameters()),"..//..//RailNET_2.0//ResNet34_moderate_nnc_best_f1.pth")
-    _, _ =load_checkpoint(heav_34, torch.optim.Adam(heav_34.parameters()),"..//..//RailNET_2.0//ResNet34_heavy_nnc_best_recall.pth")
+    _, _ =load_checkpoint(heav_18, torch.optim.Adam(heav_18.parameters()),"..//models//ResNet18_heavy_nnc_best_f1.pth")
+    _, _ =load_checkpoint(med_18, torch.optim.Adam(med_18.parameters()),"..//models//ResNet18_nnc_best_f1.pth")
+    _, _ =load_checkpoint(med_34, torch.optim.Adam(med_34.parameters()),"..//models//ResNet34_moderate_nnc_best_f1.pth")
+    _, _ =load_checkpoint(heav_34, torch.optim.Adam(heav_34.parameters()),"..//models//ResNet34_heavy_nnc_best_recall.pth")
     
     RailNET = [heav_18, med_18, med_34, heav_34]
     
