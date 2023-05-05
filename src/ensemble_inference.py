@@ -69,7 +69,7 @@ class EnsembleInference:
                 model_predictions[f'model_{idx}_prediction'] = int(score > self.threshold)
 
             model_predictions['ensemble_prediction'] = ensemble_label
-            model_predictions['ensemble_confidence'] = avg_confidence_score
+            model_predictions['confidence'] = avg_confidence_score
 
             predictions.append(model_predictions)
 
