@@ -9,7 +9,14 @@ import librosa
 import numpy as np
 import soundfile as sf
 
+'''
+These are functions to use a simple energy thresholding technique to select segments from a longer
+audio file where there is acoustic energy passed a predetermined threshold. In the context of this
+project, this was only used to illustrate the point that auto-generated data like this results in
+poorer models than the strongly labeled, manually curated data that was ultimately used to train RailNET.
 
+'''
+# Main function
 def split_audio(input_folder, output_folder, target_sr=44100, window_seconds=3, threshold_multiple=1):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
@@ -28,7 +35,7 @@ def split_audio(input_folder, output_folder, target_sr=44100, window_seconds=3, 
 
     print("Processing complete. Check the '{}' folder for the {}-second segments.".format(output_folder, window_seconds))
 
-
+# Helper function to calculate the energies in each window
 def calculate_energies(y, sr, window_seconds):
     window_length = window_seconds * sr
     hop_length = window_length
@@ -36,13 +43,14 @@ def calculate_energies(y, sr, window_seconds):
     energies = np.sum(windows ** 2, axis=1)
     return windows, energies
 
-
+# Helper function to which windows have energy greater than the energy threshold, which is the mean of
+# all energies times a chosen threshold multiple.
 def identify_signal_windows(energies, threshold_multiple):
     energy_threshold = (threshold_multiple * energies.mean())
     signal_windows = np.where(energies > energy_threshold)[0]
     return signal_windows
 
-
+# Helper function to then save the identified segments
 def save_segments(y, signal_samples, file, output_folder, sr, window_seconds):
     window_length = window_seconds * sr
     for i, start_sample in enumerate(signal_samples):

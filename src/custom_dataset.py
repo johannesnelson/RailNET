@@ -13,6 +13,13 @@ from torch.utils.data import Dataset, DataLoader, Subset
 
 
 class Virginia_Rail_Dataset(Dataset):
+    '''
+    Custom dataset for binary classifcation model. This will assume all positive cases are in a single folder and all negative cases
+    are in a separate folder--this is where labels will be pulled from. It defines three types of transforms, depending on what part of the pipeline the data is in. Some transforms
+    are applied directly to waveform data (augmentation__noise_transforms), so these are actually applied prior to the universal 
+    preprocessing steps that are done when creating spectrograms. Once spectrograms are created, further image-based augmentation is applied
+    with the regular augmentation_transforms. 
+    '''
 
     def __init__(self,
                  root_dir,
