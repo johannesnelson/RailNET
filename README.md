@@ -56,7 +56,7 @@ I will be using RailNET in monitoring projects for the next few months, hoping t
 
 ## Collaborating
 
-I freelance as a consultant for acoustic monitoring projects, and I would love to help you with your project!
+I freelance as a consultant for acoustic monitoring projects, and I would love to help you with yours!
 ## License
 
 This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) license. You are free to use, share, and adapt this work for non-commercial purposes only, as long as you give appropriate credit, provide a link to the license, and indicate if changes were made. For more information, please visit [creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/).
