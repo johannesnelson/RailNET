@@ -38,8 +38,7 @@ The clean_output is True by default and the threshold is 0.5.
 
 Keep in mind that the negative class that this model was trained on reflects the specific needs of my study area--meaning that precision is likely to suffer if your background soundscapes differ from the ones that informed our decisions of what species to include. Recomposing the negative class and retraining could help here, and I hope to develop some processes to streamline this type of recomposition in the near future. For now, you can use the train_RailNET.py file to find code to train an instance of RailNET, provided you have folders for a positive and negative class. The usage example at the bottom of the script shows how you can do this:
 
-'''
-
+```
  train_RailNET(mod_type= 'resnet34',  
                augmentation_level= 'moderate', 
                positive_train= "..//data//positive_class", 
@@ -49,8 +48,7 @@ Keep in mind that the negative class that this model was trained on reflects the
                num_epochs=70,
                starting_LR=0.001,
                checkpoint_path="..//..//name_for_checkpoint.pth")
-
-'''
+```
 
 Note that for this to be effective, it is best to use true soundscape data for the test case. You could also use a subset of focal recordings from public databases, but high performance on these will not always be reflected in high performance on soundscape data. Since the train function used here saves checkpoints with the best recall and the best F1 score on the test set, using real monitoring data from soundscape recordings will lead to the best performance.
 
